@@ -1,5 +1,5 @@
 name: Download and Upload Clonezilla
-
+#clonezilla-live-3.1.3-16-i686.iso
 on:
   repository_dispatch:
   workflow_dispatch:
@@ -14,9 +14,17 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+        lfs: true  
+        # Enable LFS support
+
+    - name: Install Git LFS
+      run: |
+        sudo apt-get update
+        sudo apt-get install git-lfs
+        git lfs install
 
     - name: Download Clonezilla ISO
-    #clonezilla-live-3.1.3-16-i686.iso
       run: wget -O clonezilla-live.iso "https://master.dl.sourceforge.net/project/clonezilla/clonezilla_live_stable/3.1.3-16/clonezilla-live-3.1.3-16-i686.iso?viasf=1"
 
     - name: Create download directory
@@ -24,6 +32,11 @@ jobs:
 
     - name: Move ISO to download directory
       run: mv clonezilla-live.iso download/
+
+    - name: Track ISO with Git LFS
+      run: |
+        git lfs track "download/clonezilla-live.iso"
+        git add .gitattributes
 
     - name: Commit and push changes
       run: |
