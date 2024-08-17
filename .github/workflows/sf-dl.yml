@@ -1,9 +1,11 @@
 name: Download and Upload Clonezilla
 
 on:
-  push:
-    branches:
-      - main
+  repository_dispatch:
+  workflow_dispatch:
+  #push:
+  #  branches:
+  #    - main
 
 jobs:
   download-and-upload:
